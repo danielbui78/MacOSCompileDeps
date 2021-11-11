@@ -1,15 +1,42 @@
 # LuxCoreRender Mac Files #
-
 This repository contains the source dependencies for the Mac OS version of LuxCoreRender.
-
 The boost compile used pyenv to build the libraries against versions used in blender 2.8.
 
-To use pyenv do the following:
+
+# macOS 11.4 BIG SUR instructions (assumes CMake 3.20+) #
+===========================================
+
+These instructions based on the original macOS 11+ guide for Compiling LuxCore:
+  https://wiki.luxcorerender.org/Compiling_LuxCore#macOS_11.2B
+
 ```
-brew install pyenv
+brew install pyenv cmake bison gnu-sed gnu-tar xz libtool autoconf automake ispc bzip2 jpeg
+```
+
+===========================================
+
+After installing pyenv, the following steps to create or modify .zshrc must be performed in order for pyenv to correctly set python and pip version:
+
+* https://gist.github.com/josemarimanio/9e0c177c90dee97808bad163587e80f8
+
+Be sure to follow extra steps for 11.4, i.e. add this to .zshrc : `eval "$(pyenv init --path)`
+Once .zshrc is created or modified, you must restart Terminal program for changes to take effect.
+
+```
+PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
+PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 pyenv init
-env PYTHON_CONFIGURE_OPTS="--enable-framework" pyenv install 3.7.4
-pip install numpy==1.11.2
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)”
+
+env PYTHON_CONFIGURE_OPTS="--enable-framework" CFLAGS="-I$(brew --prefix openssl)/include -I$(brew --prefix bzip2)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include" LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib -L$(brew --prefix zlib)/lib -L$(brew --prefix bzip2)/lib" pyenv install --patch 3.7.4 < <(curl -sSL https://github.com/python/cpython/commit/8ea6353.patch\?full_index\=1)
+
+pyenv global 3.7.4
+pip install --upgrade pip
+
+curl -o numpy-1.19.4-cp37-cp37m-macosx_11_0_x86_64.whl https://files.pythonhosted.org/packages/46/09/1bae812d4afa67e365d3d1dbdc0e9071ba7678611f52b49353d6104ae8ff/numpy-1.19.4-cp37-cp37m-macosx_10_9_x86_64.whl
+pip install numpy-1.19.4-cp37-cp37m-macosx_11_0_x86_64.whl
+
 pip install pillow
 pip install pyside2
 ```
