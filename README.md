@@ -4,7 +4,7 @@ The boost compile used pyenv to build the libraries against versions used in ble
 
 
 # macOS 11.4 BIG SUR instructions (assumes CMake 3.20+) #
-===========================================
+---------------------
 
 These instructions based on the original macOS 11+ guide for Compiling LuxCore:
   https://wiki.luxcorerender.org/Compiling_LuxCore#macOS_11.2B
@@ -13,7 +13,7 @@ These instructions based on the original macOS 11+ guide for Compiling LuxCore:
 brew install pyenv cmake bison gnu-sed gnu-tar xz libtool autoconf automake ispc bzip2 jpeg
 ```
 
-===========================================
+---------------------
 
 After installing pyenv, the following steps to create or modify .zshrc must be performed in order for pyenv to correctly set python and pip version:
 
@@ -40,3 +40,62 @@ pip install numpy-1.19.4-cp37-cp37m-macosx_11_0_x86_64.whl
 pip install pillow
 pip install pyside2
 ```
+
+# Compile Dependencies #
+```
+pyenv shell 3.7.4
+
+git clone https://github.com/LuxCoreRender/MacOSCompileDeps.git
+cd MacOSCompileDeps
+./cut_deps_release
+cd ..
+```
+
+This creates a MacDistFiles.tar.gz in the MacOSCompileDeps folder.
+
+# Compile LuxCore #
+```
+git clone https://github.com/LuxCoreRender/LuxCore.git
+cd LuxCore
+tar xzf ../MacOSCompileDeps/MacDistFiles.tar.gz
+```
+
+-------------------------------
+
+For commandline build with make:
+```
+export PATH="/usr/local/opt/bison/bin:/usr/local/bin:$PATH"
+DEPS_SOURCE=`pwd`/macos
+mkdir build
+cd  build
+cmake -DOSX_DEPENDENCY_ROOT=$DEPS_SOURCE -DCMAKE_BUILD_TYPE=Release ..
+make
+```
+
+--------------------------------
+
+For Xcode:
+```
+export PATH="/usr/local/opt/bison/bin:/usr/local/bin:$PATH"
+DEPS_SOURCE=`pwd`/macos
+mkdir build
+cd  build
+cmake -G Xcode -DOSX_DEPENDENCY_ROOT=$DEPS_SOURCE -DCMAKE_BUILD_TYPE=Release -T buildsystem=1 ..
+```
+Open Xcode project and compile.
+
+# Make bundle #
+
+Edit scripts/macos/codesign.sh to match your certificate ( something like A1CD139B9FD66DE9D474D420C1899EA96A622B9A )
+
+For commandline build:
+```
+./scripts/macos/pack_lux_osx.sh
+```
+
+For XCode build:
+```
+./scripts/macos/pack_lux_osx_xcode.sh
+```
+
+This should produce a distributable .dmg.
