@@ -81,8 +81,9 @@ DEPS_SOURCE=`pwd`/macos
 mkdir build
 cd  build
 cmake -G Xcode -DOSX_DEPENDENCY_ROOT=$DEPS_SOURCE -DCMAKE_BUILD_TYPE=Release -T buildsystem=1 ..
+cd ..
 ```
-Open Xcode project and compile.
+Open Xcode project located in LuxCore/build folder.  Select "ALL_BUILD" as the target and then Product->Build For->Profiling.
 
 # Make bundle #
 
