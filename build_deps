@@ -330,6 +330,9 @@ NEXT=4.1
 if [[ $STAGE && $STAGE < $NEXT ]] ; then
   begin_stage openimageio oiio*.tar.gz
 
+  echo " * Patching OpenImageIO Makefile"
+  cp ${DIST}/oiio-Release-1.18.13-Makefile-patch ${WORK}
+
   echo " * Patching OpenImageIO"
   if CMAKE_PREFIX_PATH=$TARGET make $MAKEOPTS BOOST_HOME=$TARGET \
     ILMBASE_HOME=$TARGET VERBOSE=0 USE_FFMPEG=0 \
