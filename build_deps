@@ -199,9 +199,9 @@ EOF
     --with-serialization --with-system --with-thread --with-chrono \
     threading=multi link=static python=${PYVER} \
     release install ; then
-    # Fix boost python lib name
-    mv $TARGET/lib/libboost_python*.a $TARGET/lib/libboost_python.a
-    mv $TARGET/lib/libboost_numpy*.a $TARGET/lib/libboost_numpy.a
+#    # Fix boost python lib name
+#    mv $TARGET/lib/libboost_python*.a $TARGET/lib/libboost_python.a
+#    mv $TARGET/lib/libboost_numpy*.a $TARGET/lib/libboost_numpy.a
     echo " * Boost compiled and installed successfully"
   else
     echo " !!! Boost compilation failed"

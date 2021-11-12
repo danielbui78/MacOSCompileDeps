@@ -45,7 +45,8 @@ pip install pyside2
 ```
 pyenv shell 3.7.4
 
-git clone https://github.com/LuxCoreRender/MacOSCompileDeps.git
+#git clone https://github.com/LuxCoreRender/MacOSCompileDeps.git
+git clone https://github.com/danielbui78/MacOSCompileDeps.git
 cd MacOSCompileDeps
 ./cut_deps_release
 cd ..
@@ -55,7 +56,8 @@ This creates a MacDistFiles.tar.gz in the MacOSCompileDeps folder.
 
 # Compile LuxCore #
 ```
-git clone https://github.com/LuxCoreRender/LuxCore.git
+#git clone https://github.com/LuxCoreRender/LuxCore.git
+git clone https://github.com/danielbui78/LuxCore.git
 cd LuxCore
 tar xzf ../MacOSCompileDeps/MacDistFiles.tar.gz
 ```
