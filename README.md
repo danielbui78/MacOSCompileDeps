@@ -19,7 +19,7 @@ After installing pyenv, the following steps to create or modify .zshrc must be p
 
 * https://gist.github.com/josemarimanio/9e0c177c90dee97808bad163587e80f8
 
-Be sure to follow extra steps for 11.4, i.e. add this to .zshrc : `eval "$(pyenv init --path)`
+Be sure to follow extra steps for 11.4, i.e. add this to .zshrc : `eval "$(pyenv init --path)"`
 Once .zshrc is created or modified, you must restart Terminal program for changes to take effect.
 
 ```
