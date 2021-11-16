@@ -1,9 +1,11 @@
-# LuxCoreRender Mac Files #
-This repository contains the source dependencies for the Mac OS version of LuxCoreRender.
+# yaluxplug-LuxCore Mac Dependency Files #
+
+This repository contains the source dependencies for the Mac OS version of LuxCoreRender version 2.5.  It is the current version compatible with yaluxplug-LuxCore.
+
 The boost compile used pyenv to build the libraries against versions used in blender 2.8.
 
 
-# macOS 11.4 BIG SUR instructions (assumes CMake 3.20+) #
+# macOS 11.4 - 11.6 BIG SUR instructions (assumes CMake 3.20+, zsh) #
 ---------------------
 
 These instructions based on the original macOS 11+ guide for Compiling LuxCore:
@@ -19,7 +21,7 @@ After installing pyenv, the following steps to create or modify .zshrc must be p
 
 * https://gist.github.com/josemarimanio/9e0c177c90dee97808bad163587e80f8
 
-Be sure to follow extra steps for 11.4, i.e. add this to .zshrc : `eval "$(pyenv init --path)"`
+Be sure to follow extra steps for 11.4+, i.e. add this to .zshrc : `eval "$(pyenv init --path)"`
 Once .zshrc is created or modified, you must restart Terminal program for changes to take effect.
 
 ```
@@ -64,7 +66,7 @@ tar xzf ../MacOSCompileDeps/MacDistFiles.tar.gz
 
 -------------------------------
 
-For commandline build with make:
+# NOTE: I have not yet been able to complete commandline build with make successfully, using v2.5 and Big Sur.  The following steps are copied directly from LuxCore compile guide and are only for information purposes. #
 ```
 export PATH="/usr/local/opt/bison/bin:/usr/local/bin:$PATH"
 DEPS_SOURCE=`pwd`/macos
@@ -76,6 +78,7 @@ make
 
 --------------------------------
 
+# Xcode build is currently the only way I know how to successfully build yaluxplug-LuxCore / LuxCore 2.5. #
 For Xcode:
 ```
 export PATH="/usr/local/opt/bison/bin:/usr/local/bin:$PATH"
@@ -90,11 +93,6 @@ Open Xcode project located in LuxCore/build folder.  Select "ALL_BUILD" as the t
 # Make bundle #
 
 Edit scripts/macos/codesign.sh to match your certificate ( something like A1CD139B9FD66DE9D474D420C1899EA96A622B9A )
-
-For commandline build:
-```
-./scripts/macos/pack_lux_osx.sh
-```
 
 For XCode build:
 ```
