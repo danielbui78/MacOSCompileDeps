@@ -55,7 +55,7 @@ Building the MacOS dependency libraries yourself is highly discouraged unless ab
 
 Direct Download link: MacDistFiles.tar.gz (114 MB): https://github.com/LuxCoreRender/MacOSCompileDeps/releases/download/luxcorerender_v2.5rc1/MacDistFiles.tar.gz
 
-# Compile Dependencies (OPTIONAL: SEE ABOVE) #
+# Compile Dependencies (OPTIONAL) #
 If you decide to build the libraries yourself for whatever reason, you must first remove the following libpng14 folder which is contained within the Mono framework: "/Library/Frameworks/Mono.framework/Headers -> libpng14".  The Headers folder is a symlink, and on Big Sur 11.6, the Headers folder is linked to the following folder path: "/Library/Frameworks/Mono.framework/Versions/6.12.0/include".  If you do not remove this and any other conflicting libpng folder in your library header/include path, then luxcore will build successfully but when you run the executables, you will receive a RUNTIME ERROR and segfault when trying to read PNG files.  This is why I recommend you use the precompiled libraries whenever possible.
 
 ```
@@ -69,7 +69,7 @@ cd ..
 
 This creates a MacDistFiles.tar.gz in the MacOSCompileDeps folder.
 
-# Step 4. Build yaluxplug-LuxCore Xcode project files#
+# Step 4. Build yaluxplug-LuxCore Xcode project files #
 If you downloaded the precompiled binaries, then substitute the "../MacOSCompileDeps/" path with the correct path to wherever you downloaded it.
 
 ```
@@ -80,19 +80,10 @@ tar xzf ../MacOSCompileDeps/MacDistFiles.tar.gz
 
 -------------------------------
 
-# NOTE: I have not yet been able to complete commandline build with make successfully, using v2.5 and Big Sur.  The following steps are copied directly from LuxCore compile guide and are only for information purposes. #
-```
-export PATH="/usr/local/opt/bison/bin:/usr/local/bin:$PATH"
-DEPS_SOURCE=`pwd`/macos
-mkdir build
-cd  build
-cmake -DOSX_DEPENDENCY_ROOT=$DEPS_SOURCE -DCMAKE_BUILD_TYPE=Release ..
-make
-```
+NOTE: I have not yet been able to complete commandline build with make successfully, using v2.5 and Big Sur.  If you are interested in figuring out a way to build commandline with make on your own, then please refer to the LuxCore Compile guide here: https://wiki.luxcorerender.org/Compiling_LuxCore#macOS_11.2B
 
---------------------------------
+Xcode build is currently the only way I know how to successfully build yaluxplug-LuxCore / LuxCore 2.5.
 
-# Xcode build is currently the only way I know how to successfully build yaluxplug-LuxCore / LuxCore 2.5. #
 For Xcode:
 ```
 export PATH="/usr/local/opt/bison/bin:/usr/local/bin:$PATH"
