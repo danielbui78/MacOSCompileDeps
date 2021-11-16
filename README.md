@@ -1,13 +1,18 @@
 # yaluxplug-LuxCore Mac Dependency Files #
 
-This repository contains the source dependencies for the Mac OS version of LuxCoreRender version 2.5.  It is the current version compatible with yaluxplug-LuxCore.
+This README contains build instructions for building yaluxplug-LuxCore for MacOS Big Sur.  
 
-The boost compile used pyenv to build the libraries against versions used in blender 2.8.
+This repository itself contains the source dependencies for the Mac OS version of LuxCoreRender version 2.5, which is the version compatible with yaluxplug-LuxCore.  WARNING: I absolutely do NOT recommend you build the dependencies yourself unless you absolutely have no other choice.  Instead, please use the precompiled MacOS dependencies made for LuxCore 2.5 that are available here: https://github.com/LuxCoreRender/MacOSCompileDeps/releases/tag/luxcorerender_v2.5rc1 under the download link:  MacDistFiles.tar.gz (114 MB).  Then use this README for instructions on setting up brew and pyenv which are necessary to properly generate the Xcode project files.
 
+Prerequisites:
+* Big Sur 11.4 - 11.6
+* CMake 3.20+
+* zsh as default shell
 
 # macOS 11.4 - 11.6 BIG SUR instructions (assumes CMake 3.20+, zsh) #
 ---------------------
 
+# Step 1. Installing Brew #
 These instructions based on the original macOS 11+ guide for Compiling LuxCore:
   https://wiki.luxcorerender.org/Compiling_LuxCore#macOS_11.2B
 
@@ -17,6 +22,7 @@ brew install pyenv cmake bison gnu-sed gnu-tar xz libtool autoconf automake ispc
 
 ---------------------
 
+# Step 2. Installing and setting up pyenv #
 After installing pyenv, the following steps to create or modify .zshrc must be performed in order for pyenv to correctly set python and pip version:
 
 * https://gist.github.com/josemarimanio/9e0c177c90dee97808bad163587e80f8
@@ -28,8 +34,8 @@ Once .zshrc is created or modified, you must restart Terminal program for change
 PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"
 PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"
 pyenv init
-eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 
 env PYTHON_CONFIGURE_OPTS="--enable-framework" CFLAGS="-I$(brew --prefix openssl)/include -I$(brew --prefix bzip2)/include -I$(brew --prefix readline)/include -I$(xcrun --show-sdk-path)/usr/include" LDFLAGS="-L$(brew --prefix openssl)/lib -L$(brew --prefix readline)/lib -L$(brew --prefix zlib)/lib -L$(brew --prefix bzip2)/lib" pyenv install --patch 3.7.4 < <(curl -sSL https://github.com/python/cpython/commit/8ea6353.patch\?full_index\=1)
 
@@ -42,12 +48,19 @@ pip install numpy-1.19.4-cp37-cp37m-macosx_11_0_x86_64.whl
 pip install pillow
 pip install pyside2
 ```
+-----------------------------
 
-# Compile Dependencies #
+# Step 3. Download or build MacOS Dependency Libraries #
+Building the MacOS dependency libraries yourself is highly discouraged unless absolutely necessary.  I recommend you download the precompiled libraries for LuxCore 2.5, which are compatible with the current version of yaluxplug-LuxCore.  
+
+Direct Download link: MacDistFiles.tar.gz (114 MB): https://github.com/LuxCoreRender/MacOSCompileDeps/releases/download/luxcorerender_v2.5rc1/MacDistFiles.tar.gz
+
+# Compile Dependencies (OPTIONAL: SEE ABOVE) #
+If you decide to build the libraries yourself for whatever reason, you must first remove the following libpng14 folder which is contained within the Mono framework: "/Library/Frameworks/Mono.framework/Headers -> libpng14".  The Headers folder is a symlink, and on Big Sur 11.6, the Headers folder is linked to the following folder path: "/Library/Frameworks/Mono.framework/Versions/6.12.0/include".  If you do not remove this and any other conflicting libpng folder in your library header/include path, then luxcore will build successfully but when you run the executables, you will receive a RUNTIME ERROR and segfault when trying to read PNG files.  This is why I recommend you use the precompiled libraries whenever possible.
+
 ```
 pyenv shell 3.7.4
 
-#git clone https://github.com/LuxCoreRender/MacOSCompileDeps.git
 git clone https://github.com/danielbui78/MacOSCompileDeps.git
 cd MacOSCompileDeps
 ./cut_deps_release
@@ -56,9 +69,10 @@ cd ..
 
 This creates a MacDistFiles.tar.gz in the MacOSCompileDeps folder.
 
-# Compile LuxCore #
+# Step 4. Build yaluxplug-LuxCore Xcode project files#
+If you downloaded the precompiled binaries, then substitute the "../MacOSCompileDeps/" path with the correct path to wherever you downloaded it.
+
 ```
-#git clone https://github.com/LuxCoreRender/LuxCore.git
 git clone https://github.com/danielbui78/LuxCore.git
 cd LuxCore
 tar xzf ../MacOSCompileDeps/MacDistFiles.tar.gz
@@ -90,7 +104,7 @@ cd ..
 ```
 Open Xcode project located in LuxCore/build folder.  Select "ALL_BUILD" as the target and then Product->Build For->Profiling.
 
-# Make bundle #
+# Step 5. Make the application bundle #
 
 Edit scripts/macos/codesign.sh to match your certificate ( something like A1CD139B9FD66DE9D474D420C1899EA96A622B9A )
 
