@@ -174,13 +174,13 @@ if [[ $STAGE && $STAGE < $NEXT ]] ; then
 
   cp -vf $DIST/numpy_patch.cpp libs/python/src/numpy/numpy.cpp
 
-  PYVER=`python3 --version 2>&1 | cut -d' ' -f2 | cut -d '.' -f'1 2'`
+  PYVER=`python --version 2>&1 | cut -d' ' -f2 | cut -d '.' -f'1 2'`
   echo " * Compiling boost for python-${PYVER}"
-  PYROOT=`python3 -c "import sys; print(sys.prefix)"`
+  PYROOT=`python -c "import sys; print(sys.prefix)"`
   sleep 1
   cat <<EOF >>tools/build/src/user-config.jam
 using python : ${PYVER}
-             : python3
+             : python
              : ${PYROOT}/include/python${PYVER}m
              : ${PYROOT}/lib ;
 EOF
@@ -188,7 +188,7 @@ EOF
   echo tools/build/src/user-config.jam
 
   if ! ./bootstrap.sh --without-icu --prefix=$TARGET/boost \
-       --with-python=python3 \
+       --with-python=python \
        --with-python-root=${PYROOT} ;then
     echo " !!! Boost bootstrap failed"
     exit 1
